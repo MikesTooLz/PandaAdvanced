@@ -15,7 +15,7 @@ BTN_IDX_NAME     = 'VCLEFT_switchStatusIndex'
 BTN_IDX_VAL      = 'VCLEFT_SWITCH_STATUS_INDEX_1'
 BTN_STATE_NAME   = 'VCLEFT_swcRightScrollTicks'
 BTN_STATE_VALS   = [-1, 1]
-BUS_ID           = 0
+BUS_ID           = 6
 BUS_SPEED        = 500
 DBC_FILE         = '/usr/local/dbc/Model3CAN.dbc'
 SPEED_ADDR_NAME  = 'ID257DIspeed'
@@ -50,8 +50,8 @@ p.set_can_speed_kbps(BUS_ID, BUS_SPEED)
 
 while True:
   sleep(randint(MIN_DELAY, MAX_DELAY))
-  speed_state = get_state(SPEED_ADDR_NAME)
-  speed_finalstate = speed_state[SPEED_STATE_NAME]
+  #speed_state = get_state(SPEED_ADDR_NAME)
+  #speed_finalstate = speed_state[SPEED_STATE_NAME]
   ap_state = get_state(AP_ADDR_NAME)
   ap_finalstate = ap_state[AP_STATE_NAME]
   print(ap_finalstate)
