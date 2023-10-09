@@ -51,6 +51,7 @@ p.set_can_speed_kbps(BUS_ID, BUS_SPEED)
 while True:
   sleep(randint(MIN_DELAY, MAX_DELAY))
   speed_state = get_state(SPEED_ADDR_NAME)
+  speed_finalstate = speed_state[SPEED_STATE_NAME]
   ap_state = get_state(AP_ADDR_NAME)
-  ap_finalstate = speed_state[AP_STATE_NAME]
+  ap_finalstate = ap_state[AP_STATE_NAME]
   print(ap_finalstate)
