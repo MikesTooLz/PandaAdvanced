@@ -56,4 +56,14 @@ while True:
     #speed_finalstate = speed_state[SPEED_STATE_NAME]
     ap_state = get_state(AP_ADDR_NAME)
     ap_finalstate = ap_state[AP_STATE_NAME]
+    #Move speed down/up
+    btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
+    btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
+    set_state(BTN_ADDR_NAME, btn_state)
+    
+    print("speed: " + BTN_STATE_VALS[val])
     print(ap_finalstate)
+    val = (val + 1) % len(BTN_STATE_VALS)
+
+  if speed_state[SPEED_STATE_NAME] = 0:
+    print("car not moving")
