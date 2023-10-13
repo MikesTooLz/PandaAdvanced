@@ -65,5 +65,5 @@ while True:
     print(ap_finalstate)
     val = (val + 1) % len(BTN_STATE_VALS)
 
-  if speed_state[SPEED_STATE_NAME] = 0:
+  if speed_state[SPEED_STATE_NAME] > 1:
     print("car not moving")
