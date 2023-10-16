@@ -1,4 +1,4 @@
-# PandaAdvanced
+# Setup
 
 ```
 sudo apt install python3 idle3
