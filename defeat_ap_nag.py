@@ -22,6 +22,8 @@ SPEED_ADDR_NAME  = 'ID257DIspeed'
 SPEED_STATE_NAME = 'DI_vehicleSpeed'
 AP_ADDR_NAME = 'ID399DAS_status'
 AP_STATE_NAME = 'DAS_autopilotState'
+TRACK_ADDR_NAME = 'ID118DriveSystemStatus'
+TRACK_STATE_NAME  = 'DI_trackModeState'
 
 def get_state(addr_name, idx_name = None, idx_val = None):
   target_addr = db.get_message_by_name(addr_name).frame_id
@@ -56,14 +58,17 @@ while True:
     #speed_finalstate = speed_state[SPEED_STATE_NAME]
     ap_state = get_state(AP_ADDR_NAME)
     ap_finalstate = ap_state[AP_STATE_NAME]
+    trackmode_state = get_state(TRACK_ADDR_NAME)
+    trackmode_finalstate = trackmode_state[TRACK_STATE_NAME]
     #Move speed down/up
     btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
     btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
     set_state(BTN_ADDR_NAME, btn_state)
     
     print("speed: " + BTN_STATE_VALS[val])
-    print(ap_finalstate)
+    print("AP State: " + ap_finalstate)
+    print("Track Mode: " + trackmode_finalstate)
     val = (val + 1) % len(BTN_STATE_VALS)
 
-  if speed_state[SPEED_STATE_NAME] > 1:
+  if speed_state[SPEED_STATE_NAME] == 0:
     print("car not moving")
