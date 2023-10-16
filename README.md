@@ -2,4 +2,4 @@
 
 python3 -m pip install cantools
 
-/usr/local/dbc/Model3CAN.dbc
+wget -O /usr/local/dbc/Model3CAN.dbc https://github.com/joshwardell/model3dbc/raw/master/Model3CAN.dbc
