@@ -49,7 +49,7 @@ p.set_can_speed_kbps(BUS_ID, BUS_SPEED)
 while True:
   sleep(randint(MIN_DELAY, MAX_DELAY))
   speed_state = get_state(SPEED_ADDR_NAME)
-
+  print(val)
   if speed_state[SPEED_STATE_NAME] > 0:
     btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
     btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
