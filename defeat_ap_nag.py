@@ -24,6 +24,8 @@ AP_ADDR_NAME = 'ID399DAS_status'
 AP_STATE_NAME = 'DAS_autopilotState'
 TRACK_ADDR_NAME = 'ID118DriveSystemStatus'
 TRACK_STATE_NAME  = 'DI_trackModeState'
+GEAR_ADDR_NAME  = 'ID118DriveSystemStatus'
+GEAR_STATE_NAME = 'DI_gear'
 
 def get_state(addr_name, idx_name = None, idx_val = None):
   target_addr = db.get_message_by_name(addr_name).frame_id
@@ -53,7 +55,10 @@ p.set_can_speed_kbps(BUS_ID, BUS_SPEED)
 while True:
   sleep(randint(MIN_DELAY, MAX_DELAY))
   speed_state = get_state(SPEED_ADDR_NAME)
-
+  gear_state = get_state(GEAR_ADDR_NAME)
+  gear_finalstate = gear_state[GEAR_STATE_NAME]
+  print(gear_finalstate)
+  
   if speed_state[SPEED_STATE_NAME] > 0:
     #speed_finalstate = speed_state[SPEED_STATE_NAME]
     ap_state = get_state(AP_ADDR_NAME)
