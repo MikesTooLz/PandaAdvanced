@@ -54,15 +54,16 @@ p.set_can_speed_kbps(BUS_ID, BUS_SPEED)
 
 while True:
   sleep(randint(MIN_DELAY, MAX_DELAY))
-  speed_state = get_state(SPEED_ADDR_NAME)
+  
   gear_state = get_state(GEAR_ADDR_NAME)
   gear_finalstate = gear_state[GEAR_STATE_NAME]
   print(gear_finalstate)
-  
-  if speed_state[SPEED_STATE_NAME] > 0:
-    #speed_finalstate = speed_state[SPEED_STATE_NAME]
-    ap_state = get_state(AP_ADDR_NAME)
-    ap_finalstate = ap_state[AP_STATE_NAME]
+
+  if gear_finalstate == 'DI_GEAR_D':
+    speed_state = get_state(SPEED_ADDR_NAME)
+    speed_finalstate = speed_state[SPEED_STATE_NAME]
+    #ap_state = get_state(AP_ADDR_NAME)
+    #ap_finalstate = ap_state[AP_STATE_NAME]
     trackmode_state = get_state(TRACK_ADDR_NAME)
     trackmode_finalstate = trackmode_state[TRACK_STATE_NAME]
     #Move speed down/up
@@ -70,10 +71,10 @@ while True:
     btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
     set_state(BTN_ADDR_NAME, btn_state)
     
-    print("speed: " + BTN_STATE_VALS[val])
-    print("AP State: " + ap_finalstate)
-    print("Track Mode: " + trackmode_finalstate)
+    print(BTN_STATE_VALS[val])
+    print(speed_finalstate)
+    print(trackmode_finalstate)
     val = (val + 1) % len(BTN_STATE_VALS)
 
-  if speed_state[SPEED_STATE_NAME] == 0:
-    print("car not moving")
+  if gear_finalstate == 'DI_GEAR_P':
+    print("car parked")
