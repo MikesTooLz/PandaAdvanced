@@ -70,11 +70,12 @@ while True:
     btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
     btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
     set_state(BTN_ADDR_NAME, btn_state)
+    val = (val + 1) % len(BTN_STATE_VALS)
     
     print(BTN_STATE_VALS[val])
     print(speed_finalstate)
     print(trackmode_finalstate)
-    val = (val + 1) % len(BTN_STATE_VALS)
+    
 
   if gear_finalstate == 'DI_GEAR_P':
     print("car parked")
