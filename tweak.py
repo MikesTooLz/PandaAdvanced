@@ -20,6 +20,8 @@ BUS_SPEED        = 500
 DBC_FILE         = '/usr/local/dbc/Model3CAN.dbc'
 SPEED_ADDR_NAME  = 'ID257DIspeed'
 SPEED_STATE_NAME = 'DI_vehicleSpeed'
+GEAR_ADDR_NAME  = 'ID118DriveSystemStatus'
+GEAR_STATE_NAME = 'DI_gear'
 
 def get_state(addr_name, idx_name = None, idx_val = None):
   target_addr = db.get_message_by_name(addr_name).frame_id
@@ -48,9 +50,9 @@ p.set_can_speed_kbps(BUS_ID, BUS_SPEED)
 
 while True:
   sleep(randint(MIN_DELAY, MAX_DELAY))
-  speed_state = get_state(SPEED_ADDR_NAME)
+  gear_state = get_state(GEAR_ADDR_NAME)
   print(val)
-  if speed_state[SPEED_STATE_NAME] > 0:
+  if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_D':
     btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
     btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
     set_state(BTN_ADDR_NAME, btn_state)
