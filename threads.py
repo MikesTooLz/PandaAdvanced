@@ -27,7 +27,7 @@ SPEED_STATE_NAME = 'DI_vehicleSpeed'
 GEAR_ADDR_NAME = 'ID118DriveSystemStatus'
 GEAR_STATE_NAME = 'DI_gear'
 GEAR_CURRENT_STATE = ''
-
+SPEED_CURRENT_STATE = ''
 db = database.load_file(DBC_FILE)
 val = 0
 p = Panda()
@@ -65,33 +65,18 @@ def set_state(addr_name, state):
 
 def runA():
     while True:
-        global GEAR_CURRENT_STATE, db, val, p
+        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, db, val, p
         try:
 
-            
-            sleep(randint(MIN_DELAY, MAX_DELAY))
-            gear_state = get_state(GEAR_ADDR_NAME)
-            GEAR_CURRENT_STATE = gear_state[GEAR_STATE_NAME]
-            if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_D':
-                #print("GEAR: Drive")
-                btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
-                btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
-                set_state(BTN_ADDR_NAME, btn_state)
-                val = (val + 1) % len(BTN_STATE_VALS)
-                sleep(0.3)
-                btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
-                btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
-                set_state(BTN_ADDR_NAME, btn_state)
-                val = (val + 1) % len(BTN_STATE_VALS)
-            if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_P':
-                #print("GEAR: Park")
-                sleep(0)
-            if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_N':
-                #print("GEAR: Neutral")
-                sleep(0)
-            if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_R':
-                #print("GEAR: Reverse")
-                sleep(0)
+            for addr, _, dat, _ in p.can_recv():
+                if addr == SPEED_ADDR_NAME:
+                    test_state = db.decode_message(SPEED_ADDR_NAME, dat)
+                    SPEED_CURRENT_STATE = test_state[SPEED_STATE_NAME]
+
+                if addr == GEAR_ADDR_NAME:
+                    test_state = db.decode_message(GEAR_ADDR_NAME, dat)
+                    GEAR_CURRENT_STATE = test_state[GEAR_STATE_NAME]
+                    
 
  
         except Exception as e:
@@ -100,11 +85,11 @@ def runA():
 
 def runB():
     while True:
-        global GEAR_CURRENT_STATE, db, val, p
+        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, db, val, p
         clear_line(3)
-        print("line1: 1")
+        print("Speed: ",SPEED_CURRENT_STATE)
         print("line2: 2")
-        print(GEAR_STATE_NAME)
+        print("Gear: ",GEAR_CURRENT_STATE)
 
 if __name__ == "__main__":
     t1 = Thread(target = runA)
