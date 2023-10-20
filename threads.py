@@ -68,20 +68,23 @@ def set_state(addr_name, state):
 #runA thread is just going to check all incoming can bus data for data we want.
 def runA():
     while True:
-        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, db, val, p
+        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, db, val, p
         try:
 
             for addr, _, dat, _ in p.can_recv():
-                if addr == SPEED_ADDR_NAME:
-                    test_state = db.decode_message(SPEED_ADDR_NAME, dat)
+                target_addr = db.get_message_by_name(SPEED_ADDR_NAME).frame_id
+                if addr == target_addr:
+                    test_state = db.decode_message(target_addr, dat)
                     SPEED_CURRENT_STATE = test_state[SPEED_STATE_NAME]
 
-                if addr == GEAR_ADDR_NAME:
-                    test_state = db.decode_message(GEAR_ADDR_NAME, dat)
+                target_addr = db.get_message_by_name(GEAR_ADDR_NAME).frame_id
+                if addr == target_addr:
+                    test_state = db.decode_message(target_addr, dat)
                     GEAR_CURRENT_STATE = test_state[GEAR_STATE_NAME]
 
-                if addr == CHARGE_ADDR_NAME:
-                    test_state = db.decode_message(CHARGE_ADDR_NAME, dat)
+                target_addr = db.get_message_by_name(CHARGE_ADDR_NAME).frame_id
+                if addr == target_addr:
+                    test_state = db.decode_message(target_addr, dat)
                     CHARGE_CURRENT_STATE = test_state[CHARGE_STATE_NAME]
  
         except Exception as e:
