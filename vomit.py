@@ -34,8 +34,8 @@ def get_state(idx_name=None, idx_val=None):
             #if addr == target_addr:
             test_state = db.decode_message(addr, dat)
 
-                if idx_name is None or test_state[idx_name] == idx_val:
-                    state = test_state
+            if idx_name is None or test_state[idx_name] == idx_val:
+                state = test_state
 
     return state
 
@@ -56,25 +56,7 @@ while True:
         sleep(randint(MIN_DELAY, MAX_DELAY))
         can_data = get_state()
         print(can_data)
-        #gear_state = get_state(GEAR_ADDR_NAME)
 
-        #if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_D':
-        #    print("GEAR: Drive")
-        #    btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
-        #    btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
-        #    set_state(BTN_ADDR_NAME, btn_state)
-        #    val = (val + 1) % len(BTN_STATE_VALS)
-        #    sleep(0.3)
-        #    btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
-        #    btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
-        #    set_state(BTN_ADDR_NAME, btn_state)
-        #    val = (val + 1) % len(BTN_STATE_VALS)
-        #if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_P':
-        #    print("GEAR: Park")
-        #if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_N':
-        #    print("GEAR: Neutral")
-        #if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_R':
-        #    print("GEAR: Reverse")
             
     except Exception as e:
         print("Exception caught", e)
