@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 from cantools import database
 from panda import Panda
 from random import randint
@@ -10,6 +9,7 @@ from threading import Thread
 # These are in seconds.
 MAX_DELAY = 6
 MIN_DELAY = 3
+
 
 # Don't touch these unless you know what you're doing.
 BTN_ADDR_NAME = 'ID3C2VCLEFT_switchStatus'
@@ -27,6 +27,18 @@ SPEED_STATE_NAME = 'DI_vehicleSpeed'
 GEAR_ADDR_NAME = 'ID118DriveSystemStatus'
 GEAR_STATE_NAME = 'DI_gear'
 GEAR_CURRENT_STATE = ''
+
+db = database.load_file(DBC_FILE)
+val = 0
+p = Panda()
+p.set_can_speed_kbps(BUS_AUTOPILOT, BUS_SPEED)
+p.set_can_speed_kbps(BUS_VEHICLE, BUS_SPEED)
+
+def clear_line(n=1):
+    LINE_UP = '\033[1A'
+    LINE_CLEAR = '\x1b[2K'
+    for i in range(n):
+        print(LINE_UP, end=LINE_CLEAR)
 
 
 def get_state(addr_name, idx_name=None, idx_val=None):
@@ -49,15 +61,14 @@ def set_state(addr_name, state):
     p.can_send(target_addr, db.encode_message(addr_name, state), BUS_VEHICLE)
     p.set_safety_mode(Panda.SAFETY_SILENT)
 
-db = database.load_file(DBC_FILE)
-val = 0
-p = Panda()
-p.set_can_speed_kbps(BUS_AUTOPILOT, BUS_SPEED)
-p.set_can_speed_kbps(BUS_VEHICLE, BUS_SPEED)
+
 
 def runA():
     while True:
+        global GEAR_CURRENT_STATE, db, val, p
         try:
+
+            
             sleep(randint(MIN_DELAY, MAX_DELAY))
             gear_state = get_state(GEAR_ADDR_NAME)
             GEAR_CURRENT_STATE = gear_state[GEAR_STATE_NAME]
@@ -74,10 +85,13 @@ def runA():
                 val = (val + 1) % len(BTN_STATE_VALS)
             if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_P':
                 #print("GEAR: Park")
+                sleep(0)
             if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_N':
                 #print("GEAR: Neutral")
+                sleep(0)
             if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_R':
                 #print("GEAR: Reverse")
+                sleep(0)
 
  
         except Exception as e:
@@ -86,12 +100,12 @@ def runA():
 
 def runB():
     while True:
-        try:
-            print(GEAR_CURRENT_STATE)
+        global GEAR_CURRENT_STATE, db, val, p
+        clear_line(3)
+        print("line1: 1")
+        print("line2: 2")
+        print(GEAR_STATE_NAME)
 
-
-        except Exception as e:
-                sleep(0)
 if __name__ == "__main__":
     t1 = Thread(target = runA)
     t2 = Thread(target = runB)
