@@ -28,6 +28,9 @@ GEAR_ADDR_NAME = 'ID118DriveSystemStatus'
 GEAR_STATE_NAME = 'DI_gear'
 GEAR_CURRENT_STATE = ''
 SPEED_CURRENT_STATE = ''
+CHARGE_ADDR_NAME = 'ID212BMS_status'
+CHARGE_STATE_NAME = 'BMS_uiChargeStatus'
+CHARGE_CURRENT_STATE = ''
 db = database.load_file(DBC_FILE)
 val = 0
 p = Panda()
@@ -76,6 +79,10 @@ def runA():
                 if addr == GEAR_ADDR_NAME:
                     test_state = db.decode_message(GEAR_ADDR_NAME, dat)
                     GEAR_CURRENT_STATE = test_state[GEAR_STATE_NAME]
+
+                if addr == CHARGE_ADDR_NAME:
+                    test_state = db.decode_message(CHARGE_ADDR_NAME, dat)
+                    CHARGE_CURRENT_STATE = test_state[CHARGE_STATE_NAME]
  
         except Exception as e:
             #print("Exception caught", e)
@@ -85,16 +92,16 @@ def runA():
 #runB thread is just to print the current known values in a viewable way
 def runB():
     while True:
-        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, db, val, p
+        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, db, val, p
         clear_line(3)
         print("Speed: ",SPEED_CURRENT_STATE)
-        print("line2: 2")
+        print("Charge Status: ",CHARGE_CURRENT_STATE)
         print("Gear: ",GEAR_CURRENT_STATE)
 
 # runC thread is where we check if the car is in drive and interact with scroll wheel.
 def runC():
     while True:
-        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, db, val, p
+        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, db, val, p
         try:
             sleep(randint(MIN_DELAY, MAX_DELAY))
             if GEAR_CURRENT_STATE == 'DI_GEAR_D':
