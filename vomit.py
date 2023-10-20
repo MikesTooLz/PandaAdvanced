@@ -4,6 +4,7 @@ from cantools import database
 from panda import Panda
 from random import randint
 from time import sleep
+import pprint
 
 # These are in seconds.
 MAX_DELAY = 6
@@ -34,8 +35,9 @@ def get_state(idx_name=None, idx_val=None):
             #if addr == target_addr:
             test_state = db.decode_message(addr, dat)
 
-            if idx_name is None or test_state[idx_name] == idx_val:
-                state = test_state
+            #if idx_name is None or test_state[idx_name] == idx_val:
+            
+            state = test_state
 
     return state
 
@@ -53,11 +55,13 @@ p.set_can_speed_kbps(BUS_VEHICLE, BUS_SPEED)
 
 while True:
     try:
-        sleep(randint(MIN_DELAY, MAX_DELAY))
+        #sleep(randint(MIN_DELAY, MAX_DELAY))
         can_data = get_state()
-        print(can_data)
+        #print(*can_data, sep='\n')
+        pprint.pprint(can_data)
+        #sleep(0.5)
 
-            
+ 
     except Exception as e:
-        print("Exception caught", e)
-        sleep(3.2)
+        #print("Exception caught", e)
+        sleep(0)
