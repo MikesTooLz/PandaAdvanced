@@ -49,16 +49,20 @@ p = Panda()
 p.set_can_speed_kbps(BUS_ID, BUS_SPEED)
 
 while True:
-  sleep(randint(MIN_DELAY, MAX_DELAY))
-  gear_state = get_state(GEAR_ADDR_NAME)
+  try:
+    sleep(randint(MIN_DELAY, MAX_DELAY))
+    gear_state = get_state(GEAR_ADDR_NAME)
   
-  if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_D':
-    btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
-    btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
-    set_state(BTN_ADDR_NAME, btn_state)
-    val = (val + 1) % len(BTN_STATE_VALS)
-    sleep(0.3)
-    btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
-    btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
-    set_state(BTN_ADDR_NAME, btn_state)
-    val = (val + 1) % len(BTN_STATE_VALS)
+    if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_D':
+      btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
+      btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
+      set_state(BTN_ADDR_NAME, btn_state)
+      val = (val + 1) % len(BTN_STATE_VALS)
+      sleep(0.3)
+      btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
+      btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
+      set_state(BTN_ADDR_NAME, btn_state)
+      val = (val + 1) % len(BTN_STATE_VALS)
+    except Exception as e:
+      print("Exception caught ",e)
+      time.sleep(3.2)
