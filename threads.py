@@ -62,7 +62,7 @@ def set_state(addr_name, state):
     p.set_safety_mode(Panda.SAFETY_SILENT)
 
 
-
+#runA thread is just going to check all incoming can bus data for data we want.
 def runA():
     while True:
         global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, db, val, p
@@ -76,13 +76,13 @@ def runA():
                 if addr == GEAR_ADDR_NAME:
                     test_state = db.decode_message(GEAR_ADDR_NAME, dat)
                     GEAR_CURRENT_STATE = test_state[GEAR_STATE_NAME]
-                    
-
  
         except Exception as e:
             #print("Exception caught", e)
             sleep(0)
 
+
+#runB thread is just to print the current known values in a viewable way
 def runB():
     while True:
         global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, db, val, p
@@ -91,12 +91,34 @@ def runB():
         print("line2: 2")
         print("Gear: ",GEAR_CURRENT_STATE)
 
+# runC thread is where we check if the car is in drive and interact with scroll wheel.
+def runC():
+    while True:
+        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, db, val, p
+        try:
+            sleep(randint(MIN_DELAY, MAX_DELAY))
+            if GEAR_CURRENT_STATE == 'DI_GEAR_D':
+                btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
+                btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
+                set_state(BTN_ADDR_NAME, btn_state)
+                val = (val + 1) % len(BTN_STATE_VALS)
+                sleep(0.3)
+                btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
+                btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
+                set_state(BTN_ADDR_NAME, btn_state)
+                val = (val + 1) % len(BTN_STATE_VALS)
+        except Exception as e:
+            sleep(3.2)
+
 if __name__ == "__main__":
     t1 = Thread(target = runA)
     t2 = Thread(target = runB)
+    t3 = Thread(target = runC)
     t1.setDaemon(True)
     t2.setDaemon(True)
+    t3.setDaemon(True)
     t1.start()
     t2.start()
+    t3.start()
     while True:
         pass
