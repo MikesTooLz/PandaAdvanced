@@ -67,7 +67,7 @@ while True:
         if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_P':
             print("GEAR: Park")
         if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_N':
-            print("GEAR: Nutral")
+            print("GEAR: Neutral")
         if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_R':
             print("GEAR: Reverse")
             
