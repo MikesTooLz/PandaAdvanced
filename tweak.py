@@ -15,7 +15,9 @@ BTN_IDX_NAME = 'VCLEFT_switchStatusIndex'
 BTN_IDX_VAL = 'VCLEFT_SWITCH_STATUS_INDEX_1'
 BTN_STATE_NAME = 'VCLEFT_swcRightScrollTicks'
 BTN_STATE_VALS = [-1, 1]
-BUS_ID = 0
+BUS_VEHICLE = 0
+BUS_RADAR = 1
+BUS_AUTOPILOT = 2
 BUS_SPEED = 500
 DBC_FILE = '/usr/local/dbc/Model3CAN.dbc'
 SPEED_ADDR_NAME = 'ID257DIspeed'
@@ -40,13 +42,14 @@ def get_state(addr_name, idx_name=None, idx_val=None):
 def set_state(addr_name, state):
     target_addr = db.get_message_by_name(addr_name).frame_id
     p.set_safety_mode(Panda.SAFETY_ALLOUTPUT)
-    p.can_send(target_addr, db.encode_message(addr_name, state), BUS_ID)
+    p.can_send(target_addr, db.encode_message(addr_name, state), BUS_VEHICLE)
     p.set_safety_mode(Panda.SAFETY_SILENT)
 
 db = database.load_file(DBC_FILE)
 val = 0
 p = Panda()
-p.set_can_speed_kbps(BUS_ID, BUS_SPEED)
+p.set_can_speed_kbps(BUS_AUTOPILOT, BUS_SPEED)
+p.set_can_speed_kbps(BUS_VEHICLE, BUS_SPEED)
 
 while True:
     try:
