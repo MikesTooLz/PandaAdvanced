@@ -54,6 +54,7 @@ while True:
         gear_state = get_state(GEAR_ADDR_NAME)
 
         if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_D':
+            print("GEAR: Drive")
             btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
             btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
             set_state(BTN_ADDR_NAME, btn_state)
@@ -63,6 +64,13 @@ while True:
             btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
             set_state(BTN_ADDR_NAME, btn_state)
             val = (val + 1) % len(BTN_STATE_VALS)
+        if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_P':
+            print("GEAR: Park")
+        if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_N':
+            print("GEAR: Nutral")
+        if gear_state[GEAR_STATE_NAME] == 'DI_GEAR_R':
+            print("GEAR: Reverse")
+            
     except Exception as e:
         print("Exception caught", e)
         sleep(3.2)
