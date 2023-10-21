@@ -31,6 +31,16 @@ SPEED_CURRENT_STATE = ''
 CHARGE_ADDR_NAME = 'ID212BMS_status'
 CHARGE_STATE_NAME = 'BMS_uiChargeStatus'
 CHARGE_CURRENT_STATE = ''
+APFUSE2_ADDR_NAME = 'ID2F1VCFRONT_eFuseDebugStatus'
+APFUSE2_STATE_NAME = 'VCFRONT_autopilot2State'
+APFUSE2_CURRENT_STATE = ''
+STATUS_ADDR_NAME = 'ID2E1VCFRONT_status'
+STATUS_STATE_NAME = 'VCFRONT_vehicleStatusDBG'
+STATUS_CURRENT_STATE = ''
+TRACKREQ_ADDR_NAME = 'ID313UI_trackModeSettings'
+TRACKREQ_STATE_NAME = 'UI_trackModeRequest'
+TRACKREQ_CURRENT_STATE = ''
+
 db = database.load_file(DBC_FILE)
 val = 0
 p = Panda()
@@ -68,14 +78,14 @@ def set_state(addr_name, state):
 #runA thread is just going to check all incoming can bus data for data we want.
 def runA():
     while True:
-        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, db, val, p
+        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, APFUSE2_CURRENT_STATE, STATUS_CURRENT_STATE, TRACKREQ_CURRENT_STATE, db, val, p
         try:
 
             for addr, _, dat, _ in p.can_recv():
                 target_addr = db.get_message_by_name(SPEED_ADDR_NAME).frame_id
                 if addr == target_addr:
                     test_state = db.decode_message(target_addr, dat)
-                    SPEED_CURRENT_STATE = test_state[SPEED_STATE_NAME]
+                    SPEED_CURRENT_STATE = 0.6214 * test_state[SPEED_STATE_NAME]
 
                 target_addr = db.get_message_by_name(GEAR_ADDR_NAME).frame_id
                 if addr == target_addr:
@@ -86,6 +96,21 @@ def runA():
                 if addr == target_addr:
                     test_state = db.decode_message(target_addr, dat)
                     CHARGE_CURRENT_STATE = test_state[CHARGE_STATE_NAME]
+
+                target_addr = db.get_message_by_name(APFUSE2_ADDR_NAME).frame_id
+                if addr == target_addr:
+                    test_state = db.decode_message(target_addr, dat)
+                    APFUSE2_CURRENT_STATE = test_state[APFUSE2_STATE_NAME]
+
+                target_addr = db.get_message_by_name(STATUS_ADDR_NAME).frame_id
+                if addr == target_addr:
+                    test_state = db.decode_message(target_addr, dat)
+                    STATUS_CURRENT_STATE = test_state[STATUS_STATE_NAME]
+
+                target_addr = db.get_message_by_name(TRACKREQ_ADDR_NAME).frame_id
+                if addr == target_addr:
+                    test_state = db.decode_message(target_addr, dat)
+                    TRACKREQ_CURRENT_STATE = test_state[TRACKREQ_STATE_NAME]
  
         except Exception as e:
             #print("Exception caught", e)
@@ -96,16 +121,18 @@ def runA():
 def runB():
     while True:
         
-        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, db, val, p, spinner
+        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, APFUSE2_CURRENT_STATE, STATUS_CURRENT_STATE, TRACKREQ_CURRENT_STATE, db, val, p, spinner
         #clear_line(3)
         print('')
         print(f'╭─',spinner,' Live Can Bus Data View ',spinner,' ─────────────────────────╮')
         print(f'│ Speed: ',SPEED_CURRENT_STATE)
         print(f'│ Charge Status: ',CHARGE_CURRENT_STATE)
         print(f'│ Gear: ',GEAR_CURRENT_STATE)
+        print(f'│ AP eFuse 2: ',APFUSE2_CURRENT_STATE)
+        print(f'│ Track Mode: ',TRACKREQ_CURRENT_STATE)
         print(f'╰─────────────────────────────────────────────────────────╯')
         sleep(0.3)
-        clear_line("6")
+        clear_line("7")
         
         if spinner == '-':
             spinner = '/'
@@ -120,7 +147,7 @@ def runB():
 # runC thread is where we check if the car is in drive and interact with scroll wheel.
 def runC():
     while True:
-        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, db, val, p
+        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, APFUSE2_CURRENT_STATE, STATUS_CURRENT_STATE, TRACKREQ_CURRENT_STATE, db, val, p
         try:
             sleep(randint(MIN_DELAY, MAX_DELAY))
             if GEAR_CURRENT_STATE == 'DI_GEAR_D':
