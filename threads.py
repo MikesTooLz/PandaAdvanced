@@ -54,6 +54,16 @@ def clear_line(n="1"):
     clear_string = clear_string.replace("#",n)
     print(clear_string, end='')
 
+def next_spin(chr):
+    if chr == '-':
+        return '/'
+    if chr == '\\':
+        return '-'
+    if chr == '|':
+        return '\\'
+    if chr == '/':
+        return '|'
+
 def get_state(addr_name, idx_name=None, idx_val=None):
     target_addr = db.get_message_by_name(addr_name).frame_id
     state = None
@@ -133,15 +143,8 @@ def runB():
         print(f'╰─────────────────────────────────────────────────────────╯')
         sleep(0.3)
         clear_line("7")
+        spinner = next_spin(spinner)
         
-        if spinner == '-':
-            spinner = '/'
-        if spinner == '\\':
-            spinner = '-'
-        if spinner == '|':
-            spinner = '\\'
-        if spinner == '/':
-            spinner = '|'
 
 
 # runC thread is where we check if the car is in drive and interact with scroll wheel.
