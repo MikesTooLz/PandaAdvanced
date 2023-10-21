@@ -49,7 +49,6 @@ p.set_can_speed_kbps(BUS_VEHICLE, BUS_SPEED)
 spinner = '/'
 
 def clear_line(n="1"):
-    #clear_string = '\033[#A\033[2K'
     clear_string = "\033[H\033[2J"
     clear_string = clear_string.replace("#",n)
     print(clear_string, end='')
@@ -127,12 +126,11 @@ def runA():
             sleep(0)
 
 
-#runB thread is just to print the current known values in a viewable way
+#runB thread is just to print the current values we are monitoring in a viewable way
 def runB():
     while True:
         
         global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, APFUSE2_CURRENT_STATE, STATUS_CURRENT_STATE, TRACKREQ_CURRENT_STATE, db, val, p, spinner
-        #clear_line(3)
         print('')
         print(f'╭─',spinner,' Live Can Bus Data View ',spinner,' ─────────────────────────╮')
         print(f'│ Speed:         ',SPEED_CURRENT_STATE)
