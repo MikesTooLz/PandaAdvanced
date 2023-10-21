@@ -38,12 +38,10 @@ p.set_can_speed_kbps(BUS_AUTOPILOT, BUS_SPEED)
 p.set_can_speed_kbps(BUS_VEHICLE, BUS_SPEED)
 spinner = '/'
 
-def clear_line(n=1):
-    LINE_UP = '\033[1A'
-    LINE_CLEAR = '\x1b[2K'
-    for i in range(n):
-        print(LINE_UP, end=LINE_CLEAR)
-
+def clear_line(n="1"):
+    clear_string = '\033[#A\033[2K'
+    clear_string = clear_string.replace("#",n)
+    print(clear_string, end='')
 
 def get_state(addr_name, idx_name=None, idx_val=None):
     target_addr = db.get_message_by_name(addr_name).frame_id
@@ -100,13 +98,12 @@ def runB():
         global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, db, val, p, spinner
         #clear_line(3)
         print('')
-        print(f'╭─ Live Can Bus Data View ',spinner,' ────────────────────────────────────────────╮')
+        print(f'╭─',spinner,' Live Can Bus Data View ',spinner,' ───────────────────────────────────╮')
         print(f'│ Speed: ',SPEED_CURRENT_STATE)
         print(f'│ Charge Status: ',CHARGE_CURRENT_STATE)
         print(f'│ Gear: ',GEAR_CURRENT_STATE)
-        print(f'╰─────────────────────────────────────────────────────────────────────╯')
-        #sleep(0.05)
-        print('\033[6A\033[2K', end='')
+        print(f'╰───────────────────────────────────────────────────────────────────╯')
+        clear_line("6")
         
         if spinner == '-':
             spinner = '/'
@@ -116,6 +113,8 @@ def runB():
             spinner = '\\'
         if spinner == '/':
             spinner = '|'
+
+
 # runC thread is where we check if the car is in drive and interact with scroll wheel.
 def runC():
     while True:
