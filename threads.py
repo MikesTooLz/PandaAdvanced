@@ -36,6 +36,7 @@ val = 0
 p = Panda()
 p.set_can_speed_kbps(BUS_AUTOPILOT, BUS_SPEED)
 p.set_can_speed_kbps(BUS_VEHICLE, BUS_SPEED)
+spinner = '/'
 
 def clear_line(n=1):
     LINE_UP = '\033[1A'
@@ -95,12 +96,26 @@ def runA():
 #runB thread is just to print the current known values in a viewable way
 def runB():
     while True:
-        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, db, val, p
-        clear_line(3)
-        print("Speed: ",SPEED_CURRENT_STATE)
-        print("Charge Status: ",CHARGE_CURRENT_STATE)
-        print("Gear: ",GEAR_CURRENT_STATE)
-
+        
+        global GEAR_CURRENT_STATE, SPEED_CURRENT_STATE, CHARGE_CURRENT_STATE, db, val, p, spinner
+        #clear_line(3)
+        print('')
+        print(f'╭─ Live Can Bus Data View ',spinner,' ────────────────────────────────────────────╮')
+        print(f'│ Speed: ',SPEED_CURRENT_STATE)
+        print(f'│ Charge Status: ',CHARGE_CURRENT_STATE)
+        print(f'│ Gear: ',GEAR_CURRENT_STATE)
+        print(f'╰─────────────────────────────────────────────────────────────────────╯')
+        #sleep(0.05)
+        print('\033[6A\033[2K', end='')
+        
+        if spinner == '-':
+            spinner = '/'
+        if spinner == '\\':
+            spinner = '-'
+        if spinner == '|':
+            spinner = '\\'
+        if spinner == '/':
+            spinner = '|'
 # runC thread is where we check if the car is in drive and interact with scroll wheel.
 def runC():
     while True:
