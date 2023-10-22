@@ -156,7 +156,7 @@ def runC():
                 btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
                 set_state(BTN_ADDR_NAME, btn_state)
                 val = (val + 1) % len(BTN_STATE_VALS)
-                sleep(0.3)
+                sleep(0.2)
                 btn_state = get_state(BTN_ADDR_NAME, BTN_IDX_NAME, BTN_IDX_VAL)
                 btn_state[BTN_STATE_NAME] = BTN_STATE_VALS[val]
                 set_state(BTN_ADDR_NAME, btn_state)
