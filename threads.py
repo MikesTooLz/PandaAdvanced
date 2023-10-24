@@ -139,7 +139,7 @@ def runB():
         print(f'│ AP eFuse 2:    ',APFUSE2_CURRENT_STATE)
         print(f'│ Track Mode:    ',TRACKREQ_CURRENT_STATE)
         print(f'╰─────────────────────────────────────────────────────────╯')
-        sleep(0.3)
+        sleep(0.1)
         clear_line("7")
         spinner = next_spin(spinner)
         
